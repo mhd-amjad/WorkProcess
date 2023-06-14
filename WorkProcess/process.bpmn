@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0z68obe" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.11.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.2.0" camunda:diagramRelationId="cc6ace29-89b9-40e8-a02a-03fbc2e8c312">
+  <bpmn:process id="zeebe-test" isExecutable="true">
+    <bpmn:startEvent id="Event_Start" name="Start">
+      <bpmn:outgoing>Flow_1ie08zg</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1ie08zg" sourceRef="Event_Start" targetRef="counter_increase" />
+    <bpmn:serviceTask id="counter_increase" name="counter Increase">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="increase" retries="3" />
+        <zeebe:taskHeaders>
+          <zeebe:header key="increaseBy" value="1" />
+        </zeebe:taskHeaders>
+        <zeebe:ioMapping>
+          <zeebe:output source="=result" target="result" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ie08zg</bpmn:incoming>
+      <bpmn:outgoing>Flow_08f9q45</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1hvg8zs" name="endd">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="endmsg" retries="1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=result" target="counter_state" />
+          <zeebe:output source="=&#34;Task Finished Successfuly&#34;" target="End_message" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08f9q45</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1vpxi2s" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_08f9q45" sourceRef="counter_increase" targetRef="Event_1hvg8zs" />
+  </bpmn:process>
+  <bpmn:message id="Message_143id7o" name="start-increase">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=result" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_04nrwno" name="resultMessage">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=result" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_044a05m" name="Message_044a05m">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=result" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="zeebe-test">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="Event_Start">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="185" y="142" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1hvg8zs_di" bpmnElement="Event_1hvg8zs">
+        <dc:Bounds x="652" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="658" y="142" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1eoj541_di" bpmnElement="counter_increase">
+        <dc:Bounds x="370" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1ie08zg_di" bpmnElement="Flow_1ie08zg">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="370" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08f9q45_di" bpmnElement="Flow_08f9q45">
+        <di:waypoint x="470" y="117" />
+        <di:waypoint x="652" y="117" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
