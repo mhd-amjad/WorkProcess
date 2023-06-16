@@ -1,4 +1,3 @@
-using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -8,24 +7,24 @@ namespace WorkProcess.Controllers;
 [Route("[controller]")]
 public class CounterController : ControllerBase
 {
-    private readonly DaprClient _daprClient;
+    private readonly ICounterActorService _counterActorService;
     private const string storeName = "statestore";
     private const string key = "counter";
 
-    public CounterController(DaprClient daprClient)
+    public CounterController(ICounterActorService counterActorService)
     {
-        _daprClient = daprClient;
+        _counterActorService = counterActorService;
     }
 
     [HttpPost("/increase")]
     public async Task<string> Increase([FromHeader] int increaseBy)
     {
-        var counter = await _daprClient.GetStateAsync<int>(storeName, key);
+        await _counterActorService.IncreaseAsync(storeName, key, increaseBy);
 
-        counter += increaseBy;
+        await Task.Delay(1000);
 
-        await _daprClient.SaveStateAsync(storeName, key, counter);
-        await Task.Delay(2000);
-        return JsonSerializer.Serialize(new CounterResult { result = counter});
+        var currentCounterValue = await _counterActorService.GetValueAsync(storeName, key);
+
+        return JsonSerializer.Serialize(new CounterResult { result = currentCounterValue });
     }
 }
