@@ -17,8 +17,7 @@ if (builder.Environment.IsDevelopment())
     actorConfig.Bind(actorOptions);
 
     builder.Services.AddActors(options => {
-        options = actorOptions;
-        options.Actors.RegisterActor<Actor>();
+        options.Actors.RegisterActor<MyActor>();
         }) ;
 }
 
@@ -31,6 +30,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.MapControllers();
+
+app.UseRouting();
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    // Register actors handlers that interface with the Dapr runtime.
+    endpoints.MapActorsHandlers();
+});
 app.Run();
