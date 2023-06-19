@@ -5,25 +5,20 @@ namespace WorkProcess;
 
 public class MyActor : Actor, IMyActor
 {
-    private readonly DaprClient _client;
-    public MyActor(ActorHost host, DaprClient client) : base(host)
+    private readonly ICounterService _counterService;
+
+    public MyActor(ActorHost host, ICounterService counterService) : base(host)
     {
-        _client = client;
+        _counterService = counterService;
     }
 
-    //public Task<string> IncreaseCounterAsync()
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    //public Task<string> QueryCounterAsync()
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    public async Task<string> SaySomething()
+    public async Task IncreaseCounterAsync(int increaseBy)
     {
-        var currentValue = await _client.GetStateAsync<int>("statestore", "counter");
-        return currentValue.ToString();
+        await _counterService.IncreaseAsync(increaseBy);
+    }
+
+    public async Task<int> QueryCounterAsync()
+    {
+        return await _counterService.GetValueAsync();
     }
 }

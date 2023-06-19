@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddDapr();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<ICounterActorService, CounterActorService>();
+builder.Services.AddTransient<ICounterService, CounterService>();
 
 if (builder.Environment.IsDevelopment())
 {

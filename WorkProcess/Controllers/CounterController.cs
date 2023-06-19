@@ -1,3 +1,5 @@
+using Dapr.Actors.Client;
+using Dapr.Actors;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -7,23 +9,23 @@ namespace WorkProcess.Controllers;
 [Route("[controller]")]
 public class CounterController : ControllerBase
 {
-    private readonly ICounterActorService _counterActorService;
-    private const string storeName = "statestore";
-    private const string key = "counter";
+    private readonly IMyActor _actor;
 
-    public CounterController(ICounterActorService counterActorService)
+    public CounterController()
     {
-        _counterActorService = counterActorService;
+        var actorType = "MyActor";
+        var actorId = new ActorId("1");
+        _actor = ActorProxy.Create<IMyActor>(actorId, actorType, new ActorProxyOptions { HttpEndpoint = "http://127.0.0.1:5001" });
     }
 
     [HttpPost("/increase")]
     public async Task<string> Increase([FromHeader] int increaseBy)
     {
-        await _counterActorService.IncreaseAsync(storeName, key, increaseBy);
+        await _actor.IncreaseCounterAsync(increaseBy);
 
         await Task.Delay(1000);
 
-        var currentCounterValue = await _counterActorService.GetValueAsync(storeName, key);
+        var currentCounterValue = await _actor.QueryCounterAsync();
 
         return JsonSerializer.Serialize(new CounterResult { result = currentCounterValue });
     }
