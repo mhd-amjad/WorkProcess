@@ -11,4 +11,4 @@ To run this project:
 2) docker compose -f docker-compose-core.yaml up
 
 You can access the local camunda dashboard and surf processes at: http://localhost:8081 .
-You also can view or edit, deploy and run the model, It exists in the project folder.
+You also can view, edit, deploy and run the model (by Camunda desktop modeler) It exists in the project folder.
