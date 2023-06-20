@@ -1,7 +1,7 @@
 # WorkProcess
 # It is a web api sample project that uses some dapr building blocks and being triggered by zeebe engine.
 
-The API is using dapr state management & Actors building blocks of dapr and triggered by local hosted zeebe engine included in self hosted Camunda platform.
+The API is using dapr state management & Actors building blocks and being triggered by local hosted zeebe engine included in self hosted Camunda platform.
 
 To run this project:
 - You have to install dapr on your machine.
