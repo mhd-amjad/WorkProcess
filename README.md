@@ -7,8 +7,8 @@ To run this project:
 - You have to install dapr on your machine.
 - .Net 6 sdk.
 - Clone and run Camunda platform on your machine by following these commands:
-git clone https://github.com/camunda/camunda-platform.git
-docker compose -f docker-compose-core.yaml up
+1) git clone https://github.com/camunda/camunda-platform.git
+2) docker compose -f docker-compose-core.yaml up
 
 You can access the local camunda dashboard and surf processes at: http://localhost:8081 .
 You also can view or edit, deploy and run the model, It exists in the project folder.
